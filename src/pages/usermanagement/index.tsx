@@ -17,35 +17,49 @@
 // ─────────────────────────────────────────────
 
 import { useState, useMemo } from "react";
-import { EyeIcon, PencilIcon, Trash2Icon, PlusIcon, UploadIcon, RefreshCwIcon, UserIcon } from "lucide-react";
+import {
+  EyeIcon,
+  PencilIcon,
+  Trash2Icon,
+  PlusIcon,
+  UploadIcon,
+  RefreshCwIcon,
+  UserIcon,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 // Common components
-import PageHeader      from "@/components/page-header";
-import TableCard       from "@/components/table-card";
-import DataTable       from "@/components/data-table";
+import PageHeader from "@/components/page-header";
+import TableCard from "@/components/table-card";
+import DataTable from "@/components/data-table";
 import SearchFilterBar from "@/components/search-filter-bar";
-import RoleBadge       from "@/components/role-badge";
+import RoleBadge from "@/components/role-badge";
 
 import type { ColumnDef, RowAction } from "@/types/table";
 
 // Page-specific components
-import UserViewModal     from "./components/user-view-modal";
-import UserFormModal     from "./components/user-form-modal";
-import DeleteUserDialog  from "./components/delete-user-dialog";
+import UserViewModal from "./components/user-view-modal";
+import UserFormModal from "./components/user-form-modal";
+import DeleteUserDialog from "./components/delete-user-dialog";
 
 // Data & types
 import type { User, UserFormData } from "./types";
-import { MOCK_USERS }               from "@/mockdata/users";
-import { PRIMARY_ROLE_OPTIONS }     from "@/constants/enum";
+import { MOCK_USERS } from "@/mockdata/users";
+import { PRIMARY_ROLE_OPTIONS } from "@/constants/enum";
 
 // ── Empty form ───────────────────────────────
 
 const EMPTY_FORM: UserFormData = {
-  empId: "", fullName: "", mobile: "", email: "",
-  primaryRole: "user_labor", customRole: null,
-  designation: "", reportingSupervisor: null,
-  reportingManager: null, roleLockStatus: "not_locked",
+  empId: "",
+  fullName: "",
+  mobile: "",
+  email: "",
+  primaryRole: "user_labor",
+  customRole: null,
+  designation: "",
+  reportingSupervisor: null,
+  reportingManager: null,
+  roleLockStatus: "not_locked",
 };
 
 // ── Column definitions ───────────────────────
@@ -67,7 +81,9 @@ const USER_COLUMNS: ColumnDef<User>[] = [
         <div className="w-7 h-7 rounded-full bg-secondary flex items-center justify-center flex-shrink-0">
           <UserIcon className="w-3.5 h-3.5 text-primary" />
         </div>
-        <span className="font-medium text-foreground text-sm">{u.fullName}</span>
+        <span className="font-medium text-foreground text-sm">
+          {u.fullName}
+        </span>
       </div>
     ),
   },
@@ -75,13 +91,17 @@ const USER_COLUMNS: ColumnDef<User>[] = [
     key: "mobile",
     header: "Mobile",
     hideBelow: "lg",
-    render: (u) => <span className=" text-xs text-muted-foreground">{u.mobile}</span>,
+    render: (u) => (
+      <span className=" text-xs text-muted-foreground">{u.mobile}</span>
+    ),
   },
   {
     key: "email",
     header: "Email",
     hideBelow: "lg",
-    render: (u) => <span className="text-xs text-muted-foreground">{u.email}</span>,
+    render: (u) => (
+      <span className="text-xs text-muted-foreground">{u.email}</span>
+    ),
   },
   {
     key: "primaryRole",
@@ -96,24 +116,27 @@ export default function UserManagementPage() {
   const [users, setUsers] = useState<User[]>(MOCK_USERS);
 
   // Search & filter
-  const [search,     setSearch]     = useState("");
+  const [search, setSearch] = useState("");
   const [roleFilter, setRoleFilter] = useState("all");
 
   // Modal states
-  const [viewUser,   setViewUser]   = useState<User | null>(null);
-  const [editUser,   setEditUser]   = useState<User | null>(null);
+  const [viewUser, setViewUser] = useState<User | null>(null);
+  const [editUser, setEditUser] = useState<User | null>(null);
   const [deleteUser, setDeleteUser] = useState<User | null>(null);
-  const [isAddOpen,  setIsAddOpen]  = useState(false);
+  const [isAddOpen, setIsAddOpen] = useState(false);
 
   // Form
-  const [form,       setForm]       = useState<UserFormData>(EMPTY_FORM);
-  const [formErrors, setFormErrors] = useState<Partial<Record<keyof User, string>>>({});
+  const [form, setForm] = useState<UserFormData>(EMPTY_FORM);
+  const [formErrors, setFormErrors] = useState<
+    Partial<Record<keyof User, string>>
+  >({});
 
   // Filtered data
   const filteredUsers = useMemo(() => {
     const q = search.toLowerCase();
     return users.filter((u) => {
-      const matchSearch = !q ||
+      const matchSearch =
+        !q ||
         u.fullName.toLowerCase().includes(q) ||
         u.empId.toLowerCase().includes(q) ||
         u.email.toLowerCase().includes(q) ||
@@ -139,13 +162,13 @@ export default function UserManagementPage() {
 
   function validateForm(): boolean {
     const e: Partial<Record<keyof User, string>> = {};
-    if (!form.empId.trim())       e.empId       = "Employee ID is required.";
-    if (!form.fullName.trim())    e.fullName     = "Full name is required.";
-    if (!form.mobile.trim())      e.mobile       = "Mobile number is required.";
-    if (!form.email.trim())       e.email        = "Email is required.";
+    if (!form.empId.trim()) e.empId = "Employee ID is required.";
+    if (!form.fullName.trim()) e.fullName = "Full name is required.";
+    if (!form.mobile.trim()) e.mobile = "Mobile number is required.";
+    if (!form.email.trim()) e.email = "Email is required.";
     else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email))
-                                  e.email        = "Enter a valid email.";
-    if (!form.designation.trim()) e.designation  = "Designation is required.";
+      e.email = "Enter a valid email.";
+    if (!form.designation.trim()) e.designation = "Designation is required.";
     setFormErrors(e);
     return Object.keys(e).length === 0;
   }
@@ -158,7 +181,11 @@ export default function UserManagementPage() {
 
   function handleSaveEdit() {
     if (!validateForm() || !editUser) return;
-    setUsers((prev) => prev.map((u) => u.id === editUser.id ? { ...form, id: editUser.id } : u));
+    setUsers((prev) =>
+      prev.map((u) =>
+        u.id === editUser.id ? { ...form, id: editUser.id } : u,
+      ),
+    );
     setEditUser(null);
   }
 
@@ -171,27 +198,47 @@ export default function UserManagementPage() {
   // ── Row actions ────────────────────────────
 
   const rowActions: RowAction<User>[] = [
-    { icon: <EyeIcon    className="w-4 h-4" />, label: "View",   onClick: setViewUser },
-    { icon: <PencilIcon className="w-4 h-4" />, label: "Edit",   onClick: openEdit },
-    { icon: <Trash2Icon className="w-4 h-4" />, label: "Delete", onClick: setDeleteUser, danger: true },
+    {
+      icon: <EyeIcon className="w-4 h-4" />,
+      label: "View",
+      onClick: setViewUser,
+    },
+    {
+      icon: <PencilIcon className="w-4 h-4" />,
+      label: "Edit",
+      onClick: openEdit,
+    },
+    {
+      icon: <Trash2Icon className="w-4 h-4" />,
+      label: "Delete",
+      onClick: setDeleteUser,
+      danger: true,
+    },
   ];
 
   // ── Render ─────────────────────────────────
 
   return (
     <div className="space-y-6">
-
       {/* Page header */}
       <PageHeader
         title="All Users"
         subtitle="Manage system users, roles, and permissions"
       >
-        <Button variant="outline" size="sm" className="gap-2"
-          onClick={() => alert("Sync — connect to API")}>
+        <Button
+          variant="outline"
+          size="sm"
+          className="gap-2"
+          onClick={() => alert("Sync — connect to API")}
+        >
           <RefreshCwIcon className="w-4 h-4" /> True-in Sync
         </Button>
-        <Button variant="outline" size="sm" className="gap-2"
-          onClick={() => alert("Import — connect to file upload")}>
+        <Button
+          variant="outline"
+          size="sm"
+          className="gap-2"
+          onClick={() => alert("Import — connect to file upload")}
+        >
           <UploadIcon className="w-4 h-4" /> Import Data
         </Button>
         <Button size="sm" className="gap-2" onClick={openAdd}>
@@ -233,14 +280,19 @@ export default function UserManagementPage() {
       </TableCard>
 
       {/* Modals */}
-      <UserViewModal    user={viewUser}   onClose={() => setViewUser(null)} />
+      <UserViewModal user={viewUser} onClose={() => setViewUser(null)} />
       <UserFormModal
         open={isAddOpen || !!editUser}
         mode={isAddOpen ? "add" : "edit"}
         form={form}
         errors={formErrors}
-        onChange={(field, value) => setForm((prev) => ({ ...prev, [field]: value }))}
-        onClose={() => { setIsAddOpen(false); setEditUser(null); }}
+        onChange={(field, value) =>
+          setForm((prev) => ({ ...prev, [field]: value }))
+        }
+        onClose={() => {
+          setIsAddOpen(false);
+          setEditUser(null);
+        }}
         onSubmit={isAddOpen ? handleSaveAdd : handleSaveEdit}
       />
       <DeleteUserDialog

@@ -25,3 +25,23 @@ export const initialAssessments: Assessment[] = [
     createdAt: "2026-03-05",
   },
 ];
+
+export const DESIGNATION_OPTIONS = [
+  { id: "frontend_dev", label: "Frontend Developer" },
+  { id: "backend_dev", label: "Backend Developer" },
+  { id: "fullstack_dev", label: "Full Stack Developer" },
+  { id: "ui_ux", label: "UI/UX Designer" },
+  { id: "qa_engineer", label: "QA Engineer" },
+  { id: "devops", label: "DevOps Engineer" },
+  { id: "project_manager", label: "Project Manager" },
+];
+
+export const MOCK_MANAGERS = [
+  { id: "m1", name: "Alice Johnson (Engineering Manager)" },
+  { id: "m2", name: "Bob Smith (Product Manager)" },
+];
+
+export const MOCK_SUPERVISORS = [
+  { id: "s1", name: "Charlie Davis (Team Lead)" },
+  { id: "s2", name: "Diana Evans (QA Lead)" },
+];

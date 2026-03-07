@@ -63,7 +63,7 @@ export default function AssessmentBuilderPage() {
   });
 
   return (
-    <div className="flex-1 space-y-6 p-4 sm:p-8 pt-6">
+    <div className="flex-1 space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <PageHeader 
           title="Assessment Builder" 

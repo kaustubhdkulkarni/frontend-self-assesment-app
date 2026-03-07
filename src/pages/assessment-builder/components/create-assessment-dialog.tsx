@@ -8,27 +8,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Separator } from "@/components/ui/separator";
 import {type Assessment, type AssessmentQuestion } from "../types";
 import { PlusCircle, Trash2, ArrowRight, ArrowLeft, CheckCircle2, AlertCircle } from "lucide-react";
+import { DESIGNATION_OPTIONS, MOCK_MANAGERS, MOCK_SUPERVISORS } from "@/mockdata/assessments";
 
-// Dummy Data
-const DESIGNATION_OPTIONS = [
-  { id: "frontend_dev", label: "Frontend Developer" },
-  { id: "backend_dev", label: "Backend Developer" },
-  { id: "fullstack_dev", label: "Full Stack Developer" },
-  { id: "ui_ux", label: "UI/UX Designer" },
-  { id: "qa_engineer", label: "QA Engineer" },
-  { id: "devops", label: "DevOps Engineer" },
-  { id: "project_manager", label: "Project Manager" },
-];
-
-const MOCK_MANAGERS = [
-  { id: "m1", name: "Alice Johnson (Engineering Manager)" },
-  { id: "m2", name: "Bob Smith (Product Manager)" },
-];
-
-const MOCK_SUPERVISORS = [
-  { id: "s1", name: "Charlie Davis (Team Lead)" },
-  { id: "s2", name: "Diana Evans (QA Lead)" },
-];
 
 interface CreateAssessmentDialogProps {
   open: boolean;
@@ -187,7 +168,7 @@ export function CreateAssessmentDialog({ open, onOpenChange, onSave, initialData
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[650px] w-[95vw] max-h-[90vh] flex flex-col p-0">
+      <DialogContent className="sm:max-w-162.5 w-[95vw] max-h-[90vh] flex flex-col p-0">
         <DialogHeader className="px-6 pt-6 pb-2">
           <DialogTitle className="text-xl">
             {initialData ? "Edit Assessment" : "Create Assessment"} - Step {step} of 4
@@ -229,7 +210,7 @@ export function CreateAssessmentDialog({ open, onOpenChange, onSave, initialData
                       <Label className="text-xs font-semibold text-muted-foreground">Question {index + 1} <span className="text-destructive">*</span></Label>
                       <Input value={q.text} onChange={(e) => updateQuestion(q.id, 'text', e.target.value)} className={!q.text.trim() && errors.questions ? "border-destructive" : ""} />
                     </div>
-                    <div className="w-full sm:w-[120px] space-y-2">
+                    <div className="w-full sm:w-30 space-y-2">
                       <Label className="text-xs font-semibold text-muted-foreground">Weightage (%) <span className="text-destructive">*</span></Label>
                       <Input type="number" value={q.weightage} onChange={(e) => updateQuestion(q.id, 'weightage', e.target.value)} className={(!q.weightage && errors.questions) || totalWeightage > 100 ? "border-destructive" : ""} />
                     </div>
@@ -324,7 +305,7 @@ export function CreateAssessmentDialog({ open, onOpenChange, onSave, initialData
         </div>
 
         <Separator />
-        <DialogFooter className="px-6 py-4 flex-row justify-between w-full">
+        <DialogFooter className="px-6 flex-row justify-between w-full">
           <Button variant="outline" onClick={handleBack} disabled={step === 1} className="w-24">
             <ArrowLeft className="w-4 h-4 mr-2" /> Back
           </Button>
